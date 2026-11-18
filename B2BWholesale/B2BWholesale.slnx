@@ -1,1 +1,5 @@
-<Solution />
+<Solution>
+  <Project Path="Wholesale.Tests/Wholesale.Tests.csproj" />
+  <Project Path="Wholesale.Web/Wholesale.Web.csproj" />
+  <Project Path="Wholesale.WinForms/Wholesale.WinForms.csproj" />
+</Solution>
