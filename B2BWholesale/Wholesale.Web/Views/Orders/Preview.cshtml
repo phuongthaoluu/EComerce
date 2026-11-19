@@ -1,0 +1,48 @@
+﻿
+@model List<Wholesale.Web.ViewModels.OrderLineViewModel>
+
+@{
+    ViewData["Title"] = "Order Preview";
+    decimal total = Model.Sum(x => x.Price * x.Quantity);
+}
+
+<div class="container mt-4">
+    <h2>Order Preview</h2>
+
+    <div class="alert alert-info">
+        This is a demo preview.
+        No order has been saved to the database.
+    </div>
+
+    <table class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ItemName</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.Price.ToString("N0") VND</td>
+                    <td>@((item.Price * item.Quantity).ToString("N0")) VND</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <h4 class="text-end">
+        Total: @total.ToString("N0") VND
+    </h4>
+
+    <a asp-controller="Orders"
+       asp-action="Create"
+       class="btn btn-secondary mt-3">
+        Back to Create Order
+    </a>
+</div>

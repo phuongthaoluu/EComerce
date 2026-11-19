@@ -32,11 +32,12 @@
                         <td>@item.Price.ToString("N0") VND</td>
                         <td>@item.StockQuantity</td>
                         <td>
-                            <button type="button"
-                                    class="btn btn-primary btn-sm"
-                                    disabled>
+                            <a asp-controller="Orders"
+                               asp-action="Create"
+                               asp-route-itemId="@item.ItemID"
+                               class="btn btn-primary btn-sm">
                                 Add to Order
-                            </button>
+                            </a>
                         </td>
                     </tr>
                 }
