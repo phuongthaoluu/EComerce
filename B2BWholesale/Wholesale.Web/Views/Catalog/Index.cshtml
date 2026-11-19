@@ -1,0 +1,46 @@
+﻿@model IEnumerable<Wholesale.Web.ViewModels.ItemViewModel>
+
+@{
+    ViewData["Title"] = "Product Catalog";
+}
+
+<div class="container mt-4">
+    <h2>Product Catalog</h2>
+
+    <p>Available wholesale products</p>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Item ID</th>
+                    <th>Item Name</th>
+                    <th>Size</th>
+                    <th>Price</th>
+                    <th>Stock Quantity</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.ItemID</td>
+                        <td>@item.ItemName</td>
+                        <td>@item.Size</td>
+                        <td>@item.Price.ToString("N0") VND</td>
+                        <td>@item.StockQuantity</td>
+                        <td>
+                            <button type="button"
+                                    class="btn btn-primary btn-sm"
+                                    disabled>
+                                Add to Order
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
