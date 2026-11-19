@@ -50,11 +50,16 @@ namespace Wholesale.WinForms.Pages
         private Control BuildFilterCard()
         {
             Panel card = Theme.MakeCard();
-            card.Padding = new Padding(10, 6, 10, 2);
-            var bar = new FlowLayoutPanel { Dock = DockStyle.Fill, WrapContents = false, AutoScroll = false };
+            card.Padding = new Padding(10, 6, 10, 6);
+            var bar = new FlowLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                WrapContents = false,
+                AutoScroll = true
+            };
 
-            AddField(bar, "From", _dtFrom, 110);
-            AddField(bar, "To", _dtTo, 110);
+            AddField(bar, "From", _dtFrom, 115);
+            AddField(bar, "To", _dtTo, 115);
             _dtFrom.Format = DateTimePickerFormat.Short;
             _dtTo.Format = DateTimePickerFormat.Short;
 
@@ -65,21 +70,25 @@ namespace Wholesale.WinForms.Pages
             _cboBasis.Items.Add("All except Cancelled");
             _cboBasis.Items.Add("Shipped + Delivered only");
             _cboBasis.SelectedIndex = 0;
-            AddField(bar, "Orders counted", _cboBasis, 170);
+            AddField(bar, "Orders counted", _cboBasis, 175);
 
             _numTop.Minimum = 1; _numTop.Maximum = 50; _numTop.Value = 5;
-            AddField(bar, "Top N items", _numTop, 60);
+            AddField(bar, "Top N items", _numTop, 65);
 
             _numThreshold.Minimum = 0; _numThreshold.Maximum = 100000;
             _numThreshold.Value = Db.GetIntSetting("LowStockThreshold", 20);
-            AddField(bar, "Low stock ≤", _numThreshold, 70);
+            AddField(bar, "Low stock ≤", _numThreshold, 75);
 
             Button apply = Theme.MakeButton("Apply filter", Theme.Primary, 110);
+            apply.Height = 30;
             apply.Margin = new Padding(8, 18, 6, 0);
             apply.Click += (s, e) => LoadDashboard();
+
             Button reset = Theme.MakeButton("Reset", Theme.Grey, 80);
+            reset.Height = 30;
             reset.Margin = new Padding(0, 18, 0, 0);
             reset.Click += (s, e) => { SetDefaults(); LoadDashboard(); };
+
             bar.Controls.Add(apply);
             bar.Controls.Add(reset);
 
@@ -89,8 +98,21 @@ namespace Wholesale.WinForms.Pages
 
         private static void AddField(FlowLayoutPanel bar, string caption, Control input, int width)
         {
-            var box = new FlowLayoutPanel { FlowDirection = FlowDirection.TopDown, WrapContents = false, AutoSize = true, Margin = new Padding(0, 0, 12, 0) };
-            box.Controls.Add(new Label { Text = caption, AutoSize = true, ForeColor = Theme.TextMuted, Margin = new Padding(0, 0, 0, 2) });
+            var box = new FlowLayoutPanel
+            {
+                FlowDirection = FlowDirection.TopDown,
+                WrapContents = false,
+                AutoSize = true,
+                AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                Margin = new Padding(0, 2, 12, 2)
+            };
+            box.Controls.Add(new Label
+            {
+                Text = caption,
+                AutoSize = true,
+                ForeColor = Theme.TextMuted,
+                Margin = new Padding(0, 0, 0, 2)
+            });
             input.Width = width;
             input.Margin = new Padding(0);
             box.Controls.Add(input);
@@ -255,7 +277,10 @@ namespace Wholesale.WinForms.Pages
                 _kpiOrders.Text = orders.ToString("N0");
                 _kpiLow.Text = low.Rows.Count.ToString("N0");
                 _kpiTop.Text = best.Rows.Count > 0 ? Convert.ToString(best.Rows[0]["ItemName"]) : "-";
-                _kpiTop.Font = new Font("Segoe UI", best.Rows.Count > 0 && Convert.ToString(best.Rows[0]["ItemName"]).Length > 18 ? 12f : 18f, FontStyle.Bold);
+                Font oldFont = _kpiTop.Font;
+                float size = best.Rows.Count > 0 && Convert.ToString(best.Rows[0]["ItemName"]).Length > 18 ? 12f : 18f;
+                _kpiTop.Font = new Font("Segoe UI", size, FontStyle.Bold);
+                if (oldFont != null && !ReferenceEquals(oldFont, Theme.KpiFont)) oldFont.Dispose();
 
                 var names = new System.Collections.Generic.List<string>();
                 var values = new System.Collections.Generic.List<double>();
