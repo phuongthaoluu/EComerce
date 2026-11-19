@@ -29,3 +29,51 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+body {
+    background-color: #f8f9fa;
+}
+
+.navbar-brand {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.navbar .nav-link {
+    margin-right: 12px;
+}
+
+    .navbar .nav-link:hover {
+        color: white;
+    }
+
+.page-content {
+    min-height: calc(100vh - 150px);
+}
+
+.card {
+    border-radius: 8px;
+}
+
+.table th,
+.table td {
+    vertical-align: middle;
+}
+
+@media (max-width: 768px) {
+    .navbar .nav-link {
+        margin-right: 0;
+    }
+
+    .page-content {
+        padding-top: 15px !important;
+    }
+
+    h2 {
+        font-size: 23px;
+    }
+
+    .table {
+        font-size: 13px;
+    }
+}
