@@ -1,0 +1,28 @@
+﻿
+@model int
+
+@{
+    ViewData["Title"] = "Order Success";
+}
+
+<div class="container mt-5 text-center">
+    <div class="alert alert-success">
+        <h3>Order Created Successfully!</h3>
+
+        <p>Your test order has been saved to the database.</p>
+
+        <h4>Order ID: #@Model</h4>
+    </div>
+
+    <a asp-controller="Orders"
+       asp-action="Create"
+       class="btn btn-primary">
+        Create Another Order
+    </a>
+
+    <a asp-controller="Catalog"
+       asp-action="Index"
+       class="btn btn-secondary">
+        Back to Catalog
+    </a>
+</div>

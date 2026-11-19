@@ -1,0 +1,101 @@
+﻿@model Wholesale.Web.ViewModels.CreateOrderViewModel
+
+@{
+    ViewData["Title"] = "Create Order";
+}
+
+<div class="container mt-4">
+    <h2>Create Order</h2>
+    @if (TempData["OrderError"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["OrderError"]
+        </div>
+    }
+    <p>Select products and enter quantities.</p>
+
+    <form asp-controller="Orders" asp-action="Create" method="post">
+        @Html.AntiForgeryToken()
+
+        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Product</th>
+                        <th>Size</th>
+                        <th>Price</th>
+                        <th>Stock</th>
+                        <th>Quantity</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Lines.Count; i++)
+                    {
+                        <tr class="order-row">
+                            <td>
+                                <input type="hidden" asp-for="Lines[i].ItemID" />
+                                @Model.Lines[i].ItemName
+                            </td>
+                            <td>@Model.Lines[i].Size</td>
+                            <td>@Model.Lines[i].Price.ToString("N0") VND</td>
+                            <td>@Model.Lines[i].StockQuantity</td>
+                            <td>
+                                <input asp-for="Lines[i].Quantity"
+                                       type="number"
+                                       min="0"
+                                       max="@Model.Lines[i].StockQuantity"
+                                       data-price="@Model.Lines[i].Price.ToString(System.Globalization.CultureInfo.InvariantCulture)"
+                                       class="form-control order-quantity"
+                                       style="width: 100px;" />
+                                <span asp-validation-for="Lines[i].Quantity"
+                                      class="text-danger"></span>
+                            </td>
+                            <td class="line-total">0 VND</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <h4 class="text-end mt-3">
+            Total: <span id="totalAmount">0 VND</span>
+        </h4>
+
+        <div class="text-end mt-3">
+            <button type="submit" class="btn btn-primary">
+                Review Order (Demo)
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+    function updateTotal() {
+        let total = 0;
+
+        document.querySelectorAll(".order-row").forEach(function (row) {
+            const input = row.querySelector(".order-quantity");
+
+            const quantity = Math.max(0, Number(input.value) || 0);
+            const price = Number(input.dataset.price);
+
+            const subtotal = quantity * price;
+            total += subtotal;
+
+            row.querySelector(".line-total").textContent =
+                subtotal.toLocaleString("vi-VN") + " VND";
+        });
+
+        document.getElementById("totalAmount").textContent =
+            total.toLocaleString("vi-VN") + " VND";
+    }
+
+    document.querySelectorAll(".order-quantity").forEach(function (input) {
+        input.addEventListener("input", updateTotal);
+    });
+
+    updateTotal();
+</script>
