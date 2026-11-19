@@ -119,36 +119,65 @@ namespace Wholesale.WinForms.Pages
             Theme.StyleGrid(_gridLines);
             t.Controls.Add(_gridLines, 0, 0);
 
-            var side = new FlowLayoutPanel { Dock = DockStyle.Fill, FlowDirection = FlowDirection.TopDown, WrapContents = false, AutoScroll = true, Padding = new Padding(12, 0, 0, 0) };
-            side.Controls.Add(new Label { Text = "Order details", Font = Theme.SectionFont, ForeColor = Theme.Navy, AutoSize = true });
-            foreach (Label l in new[] { _lblOrderNo, _lblAgent, _lblAddress, _lblDate, _lblStatus, _lblTotal })
-            {
-                l.AutoSize = false;
-                l.Width = 340;
-                l.Height = 20;
-                l.ForeColor = Theme.Navy;
-                l.Margin = new Padding(0, 2, 0, 0);
-                side.Controls.Add(l);
-            }
-            _lblAddress.Height = 38;
-            _lblTotal.Font = Theme.BoldFont;
+            var side = new FlowLayoutPanel
+{
+    Dock = DockStyle.Fill,
+    FlowDirection = FlowDirection.TopDown,
+    WrapContents = false,
+    AutoScroll = true,
+    Padding = new Padding(12, 4, 8, 8)
+};
+side.Controls.Add(new Label
+{
+    Text = "Order details",
+    Font = Theme.SectionFont,
+    ForeColor = Theme.Navy,
+    AutoSize = true,
+    Margin = new Padding(0, 0, 0, 4)
+});
 
-            side.Controls.Add(Theme.MakeLabel("Change status to", true));
-            _cboNext.DropDownStyle = ComboBoxStyle.DropDownList;
-            _cboNext.Width = 200;
-            side.Controls.Add(_cboNext);
+foreach (Label l in new[] { _lblOrderNo, _lblAgent, _lblAddress, _lblDate, _lblStatus, _lblTotal })
+{
+    l.AutoSize = false;
+    l.Width = 335;
+    l.Height = 24;
+    l.TextAlign = ContentAlignment.MiddleLeft;
+    l.ForeColor = Theme.Navy;
+    l.Margin = new Padding(0, 1, 0, 1);
+    side.Controls.Add(l);
+}
 
-            var buttons = new FlowLayoutPanel { Width = 350, Height = 90, WrapContents = true, Margin = new Padding(0, 8, 0, 0) };
-            _btnUpdate = Theme.MakeButton("Update status", Theme.Primary, 130);
-            _btnPreview = Theme.MakeButton("Manifest preview", Theme.Grey, 130);
-            _btnPrint = Theme.MakeButton("Print manifest", Theme.Success, 130);
-            _btnPdf = Theme.MakeButton("Export PDF", Theme.Warning, 130);
-            _btnUpdate.Click += (s, e) => OnUpdateStatus();
-            _btnPreview.Click += (s, e) => OnManifest("preview");
-            _btnPrint.Click += (s, e) => OnManifest("print");
-            _btnPdf.Click += (s, e) => OnManifest("pdf");
-            buttons.Controls.AddRange(new Control[] { _btnUpdate, _btnPreview, _btnPrint, _btnPdf });
-            side.Controls.Add(buttons);
+_lblAddress.Height = 42;
+_lblAddress.TextAlign = ContentAlignment.TopLeft;
+_lblTotal.Font = Theme.BoldFont;
+
+Label lblChange = Theme.MakeLabel("Change status to", true);
+lblChange.Margin = new Padding(0, 8, 0, 2);
+side.Controls.Add(lblChange);
+
+_cboNext.DropDownStyle = ComboBoxStyle.DropDownList;
+_cboNext.Width = 220;
+_cboNext.Margin = new Padding(0, 0, 0, 6);
+side.Controls.Add(_cboNext);
+
+var buttons = new FlowLayoutPanel
+{
+    Width = 340,
+    Height = 96,
+    WrapContents = true,
+    AutoSize = false,
+    Margin = new Padding(0, 4, 0, 0)
+};
+_btnUpdate = Theme.MakeButton("Update status", Theme.Primary, 135);
+_btnPreview = Theme.MakeButton("Manifest preview", Theme.Grey, 135);
+_btnPrint = Theme.MakeButton("Print manifest", Theme.Success, 135);
+_btnPdf = Theme.MakeButton("Export PDF", Theme.Warning, 135);
+_btnUpdate.Click += (s, e) => OnUpdateStatus();
+_btnPreview.Click += (s, e) => OnManifest("preview");
+_btnPrint.Click += (s, e) => OnManifest("print");
+_btnPdf.Click += (s, e) => OnManifest("pdf");
+buttons.Controls.AddRange(new Control[] { _btnUpdate, _btnPreview, _btnPrint, _btnPdf });
+side.Controls.Add(buttons);
 
             t.Controls.Add(side, 1, 0);
             card.Controls.Add(t);
