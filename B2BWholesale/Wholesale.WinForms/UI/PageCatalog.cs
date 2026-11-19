@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Wholesale.WinForms.Pages;
 
 namespace Wholesale.WinForms.UI
 {
@@ -19,7 +20,8 @@ namespace Wholesale.WinForms.UI
         {
             return new List<Entry>
             {
-
+                new Entry { Text = "Items & Stock",     Create = () => new ItemsPage() },       // Task 1.2 (items)
+                new Entry { Text = "Agents",            Create = () => new AgentsPage() }       // Task 1.2 (agents)
             };
         }
     }
