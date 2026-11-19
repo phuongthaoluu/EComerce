@@ -6,6 +6,12 @@
 
 <div class="container mt-4">
     <h2>Create Order</h2>
+    @if (TempData["OrderError"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["OrderError"]
+        </div>
+    }
     <p>Select products and enter quantities.</p>
 
     <form asp-controller="Orders" asp-action="Create" method="post">

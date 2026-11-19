@@ -1,14 +1,37 @@
 ﻿
 using Microsoft.AspNetCore.Mvc;
-using Wholesale.Web.Services;
+using Microsoft.EntityFrameworkCore;
+using Wholesale.Web.Data;
+using Wholesale.Web.Models;
+using Wholesale.Web.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Wholesale.Web.Controllers
 {
+    [Authorize(Roles = "Agent")]
     public class CatalogController : Controller
     {
-        public IActionResult Index()
+        private readonly AppDbContext _context;
+
+        public CatalogController(AppDbContext context)
         {
-            var items = SampleItemData.GetItems();
+            _context = context;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var items = await _context.Set<Item>()
+                .AsNoTracking()
+                .OrderBy(i => i.ItemID)
+                .Select(i => new ItemViewModel
+                {
+                    ItemID = i.ItemID,
+                    ItemName = i.ItemName,
+                    Size = i.Size,
+                    Price = i.Price,
+                    StockQuantity = i.StockQuantity
+                })
+                .ToListAsync();
 
             return View(items);
         }

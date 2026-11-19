@@ -10,39 +10,65 @@
     <h2>Order Preview</h2>
 
     <div class="alert alert-info">
-        This is a demo preview.
-        No order has been saved to the database.
+        Please review your order before confirming.
     </div>
 
-    <table class="table table-bordered">
-        <thead class="table-dark">
-            <tr>
-                <th>Product</th>
-                <th>Quantity</th>
-                <th>Unit Price</th>
-                <th>Subtotal</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
                 <tr>
-                    <td>@item.ItemName</td>
-                    <td>@item.Quantity</td>
-                    <td>@item.Price.ToString("N0") VND</td>
-                    <td>@((item.Price * item.Quantity).ToString("N0")) VND</td>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Subtotal</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.ItemName</td>
+                        <td>@item.Quantity</td>
+                        <td>@item.Price.ToString("N0") VND</td>
+                        <td>@((item.Price * item.Quantity).ToString("N0")) VND</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 
     <h4 class="text-end">
         Total: @total.ToString("N0") VND
     </h4>
 
-    <a asp-controller="Orders"
-       asp-action="Create"
-       class="btn btn-secondary mt-3">
-        Back to Create Order
-    </a>
+    <form asp-controller="Orders"
+          asp-action="Confirm"
+          method="post">
+
+        @Html.AntiForgeryToken()
+
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            <input type="hidden"
+                   name="Lines[@i].ItemID"
+                   value="@Model[i].ItemID" />
+
+            <input type="hidden"
+                   name="Lines[@i].Quantity"
+                   value="@Model[i].Quantity" />
+        }
+
+        <div class="mt-4">
+            <button type="submit" class="btn btn-success">
+                Confirm Order (Test)
+            </button>
+
+            <a asp-controller="Orders"
+               asp-action="Create"
+               class="btn btn-secondary">
+                Back to Create Order
+            </a>
+        </div>
+    </form>
 </div>
