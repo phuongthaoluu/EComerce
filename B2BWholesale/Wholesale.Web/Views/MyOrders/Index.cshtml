@@ -1,43 +1,317 @@
-﻿@model IEnumerable<Wholesale.Web.ViewModels.MyOrderViewModel>
+﻿
+@model IEnumerable<Wholesale.Web.ViewModels.MyOrderViewModel>
 
 @{
     ViewData["Title"] = "My Orders";
 }
 
-<div class="container mt-4">
-    <h2>My Orders</h2>
+<style>
+    .myorders-page {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        padding: 20px 0 55px;
+    }
 
-    <p>View your order history and order status.</p>
+    .myorders-header {
+        background: linear-gradient(120deg, #fff0f6, #ffffff);
+        border: 1px solid #f1dce6;
+        border-radius: 22px;
+        padding: 35px;
+        margin-bottom: 28px;
+    }
 
-    <table class="table table-bordered table-striped">
-        <thead class="table-dark">
-            <tr>
-                <th>Order ID</th>
-                <th>Order Date</th>
-                <th>Total Amount</th>
-                <th>Status</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var order in Model)
-            {
-                <tr>
-                    <td>@order.OrderID</td>
-                    <td>@order.OrderDate.ToString("dd/MM/yyyy")</td>
-                    <td>@order.TotalAmount.ToString("N0") VND</td>
-                    <td>@order.OrderStatus</td>
-                    <td>
-                        <a asp-controller="MyOrders"
-                           asp-action="Details"
-                           asp-route-id="@order.OrderID"
-                           class="btn btn-primary btn-sm">
-                            View Details
-                        </a>
-                    </td>
+    .myorders-label {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        color: #b97596;
+        margin-bottom: 12px;
+    }
 
-                </tr>
-            }
-        </tbody>
-    </table>
+    .myorders-title {
+        font-size: 35px;
+        font-weight: 800;
+        letter-spacing: -1px;
+        color: #63374d;
+        margin-bottom: 10px;
+    }
+
+    .myorders-description {
+        color: #a08a95;
+        font-size: 14px;
+        margin-bottom: 0;
+    }
+
+    .myorders-container {
+        background: #ffffff;
+        border: 1px solid #f0dce6;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 8px 30px rgba(180, 110, 145, 0.07);
+    }
+
+    .myorders-container-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 24px 28px;
+        border-bottom: 1px solid #f4e4eb;
+    }
+
+    .myorders-container-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #63374d;
+        margin: 0;
+    }
+
+    .myorders-header-badge {
+        background: #fff0f6;
+        color: #b16b8d;
+        border-radius: 20px;
+        padding: 7px 13px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .myorders-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 0;
+    }
+
+    .myorders-table thead {
+        background: #fff4f8;
+    }
+
+    .myorders-table th {
+        color: #8d5b74;
+        padding: 20px;
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+        border-bottom: 1px solid #efdce5;
+    }
+
+    .myorders-table td {
+        padding: 22px 20px;
+        vertical-align: middle;
+        border-bottom: 1px solid #f4e8ee;
+        color: #73576a;
+        font-size: 14px;
+    }
+
+    .myorders-table tbody tr {
+        transition: background 0.2s;
+    }
+
+    .myorders-table tbody tr:hover {
+        background: #fffafd;
+    }
+
+    .myorders-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .myorders-id {
+        display: inline-block;
+        background: #fff0f6;
+        color: #a85780;
+        padding: 9px 13px;
+        border-radius: 9px;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .myorders-date {
+        color: #8e7885;
+        font-size: 14px;
+        white-space: nowrap;
+    }
+
+    .myorders-amount {
+        color: #b45e87;
+        font-size: 15px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .myorders-status {
+        display: inline-block;
+        padding: 8px 13px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+        background: #f5edf2;
+        color: #94677f;
+    }
+
+    .myorders-status[data-status="Pending"] {
+        background: #fff2d9;
+        color: #97650d;
+    }
+
+    .myorders-status[data-status="Confirmed"] {
+        background: #eee9ff;
+        color: #7659a5;
+    }
+
+    .myorders-status[data-status="Shipped"] {
+        background: #eaf2ff;
+        color: #426ba6;
+    }
+
+    .myorders-status[data-status="Delivered"] {
+        background: #e7f7ec;
+        color: #328553;
+    }
+
+    .myorders-status[data-status="Cancelled"] {
+        background: #ffeaee;
+        color: #bc5267;
+    }
+
+    .myorders-btn {
+        display: inline-block;
+        background: linear-gradient(110deg, #d88eaf, #c8799d);
+        color: #ffffff;
+        border: none;
+        border-radius: 10px;
+        padding: 11px 18px;
+        font-size: 12px;
+        font-weight: 700;
+        text-decoration: none;
+        text-align: center;
+        white-space: nowrap;
+        transition: 0.2s;
+    }
+
+    .myorders-btn:hover {
+        background: linear-gradient(110deg, #cb7da1, #b86991);
+        color: #ffffff;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(190, 110, 150, 0.18);
+    }
+
+    @@media (max-width: 767px) {
+        .myorders-header {
+            padding: 25px;
+        }
+
+        .myorders-title {
+            font-size: 28px;
+        }
+
+        .myorders-container-header {
+            padding: 20px;
+        }
+
+        .myorders-table th,
+        .myorders-table td {
+            padding: 15px;
+        }
+
+        .myorders-btn {
+            padding: 10px 14px;
+        }
+    }
+</style>
+
+<div class="myorders-page">
+
+    <div class="myorders-header">
+
+        <div class="myorders-label">
+            ORDER MANAGEMENT
+        </div>
+
+        <h1 class="myorders-title">
+            My Orders
+        </h1>
+
+        <p class="myorders-description">
+            View your order history and order status.
+        </p>
+
+    </div>
+
+    <div class="myorders-container">
+
+        <div class="myorders-container-header">
+
+            <h2 class="myorders-container-title">
+                Order History
+            </h2>
+
+            <span class="myorders-header-badge">
+                My Purchases
+            </span>
+
+        </div>
+
+        <div class="table-responsive">
+
+            <table class="myorders-table">
+
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Order Date</th>
+                        <th>Total Amount</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var order in Model)
+                    {
+                        <tr>
+
+                            <td>
+                                <span class="myorders-id">
+                                    #@order.OrderID
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="myorders-date">
+                                    @order.OrderDate.ToString("dd/MM/yyyy")
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="myorders-amount">
+                                    @order.TotalAmount.ToString("N0") VND
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="myorders-status"
+                                      data-status="@order.OrderStatus">
+                                    @order.OrderStatus
+                                </span>
+                            </td>
+
+                            <td>
+                                <a asp-controller="MyOrders"
+                                   asp-action="Details"
+                                   asp-route-id="@order.OrderID"
+                                   class="myorders-btn">
+                                    View Details &rarr;
+                                </a>
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
 </div>

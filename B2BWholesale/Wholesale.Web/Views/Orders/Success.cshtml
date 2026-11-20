@@ -5,24 +5,198 @@
     ViewData["Title"] = "Order Success";
 }
 
-<div class="container mt-5 text-center">
-    <div class="alert alert-success">
-        <h3>Order Created Successfully!</h3>
+<style>
+    .success-page {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        padding: 45px 0 65px;
+    }
 
-        <p>Your test order has been saved to the database.</p>
+    .success-container {
+        max-width: 680px;
+        margin: 0 auto;
+        background: #ffffff;
+        border: 1px solid #f0dce6;
+        border-radius: 24px;
+        padding: 55px 45px;
+        text-align: center;
+        box-shadow: 0 15px 45px rgba(180, 110, 145, 0.10);
+    }
 
-        <h4>Order ID: #@Model</h4>
+    .success-icon {
+        width: 90px;
+        height: 90px;
+        background: #e8f8ee;
+        border: 1px solid #b7e5c7;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 28px;
+        color: #22a559;
+        font-size: 44px;
+        font-weight: 700;
+    }
+
+    .success-label {
+        color: #22a559;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        margin-bottom: 15px;
+    }
+
+    .success-title {
+        color: #63374d;
+        font-size: 32px;
+        font-weight: 800;
+        letter-spacing: -1px;
+        margin-bottom: 30px;
+    }
+
+    .success-order-box {
+        background: linear-gradient(120deg, #fff0f6, #fffafd);
+        border: 1px solid #f1d8e4;
+        border-radius: 15px;
+        padding: 25px;
+        margin-bottom: 35px;
+    }
+
+    .success-order-label {
+        color: #9d758a;
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .success-order-id {
+        color: #ad567f;
+        font-size: 30px;
+        font-weight: 800;
+        letter-spacing: 1px;
+        margin: 0;
+    }
+
+    .success-actions {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .success-btn-primary {
+        display: inline-block;
+        background: linear-gradient(110deg, #d88eaf, #c8799d);
+        color: #ffffff;
+        border: none;
+        border-radius: 12px;
+        padding: 15px 25px;
+        font-size: 14px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: 0.2s;
+    }
+
+    .success-btn-primary:hover {
+        background: linear-gradient(110deg, #cb7da1, #b86991);
+        color: #ffffff;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(190, 110, 150, 0.18);
+    }
+
+    .success-btn-secondary {
+        display: inline-block;
+        background: #ffffff;
+        color: #96627e;
+        border: 1px solid #e7c5d5;
+        border-radius: 12px;
+        padding: 15px 25px;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: 0.2s;
+    }
+
+    .success-btn-secondary:hover {
+        background: #fff0f6;
+        color: #a94f7d;
+        border-color: #dca5bf;
+    }
+
+    @@media (max-width: 767px) {
+        .success-page {
+            padding: 20px 0 45px;
+        }
+
+        .success-container {
+            padding: 40px 25px;
+        }
+
+        .success-title {
+            font-size: 26px;
+        }
+
+        .success-order-id {
+            font-size: 26px;
+        }
+
+        .success-actions {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .success-btn-primary,
+        .success-btn-secondary {
+            width: 100%;
+            text-align: center;
+        }
+    }
+</style>
+
+<div class="success-page">
+
+    <div class="success-container">
+
+        <div class="success-icon">
+            &#10003;
+        </div>
+
+        <div class="success-label">
+            ORDER CONFIRMED
+        </div>
+
+        <h1 class="success-title">
+            Order Created Successfully!
+        </h1>
+
+        <div class="success-order-box">
+
+            <div class="success-order-label">
+                Your Order ID
+            </div>
+
+            <h2 class="success-order-id">
+                #@Model
+            </h2>
+
+        </div>
+
+        <div class="success-actions">
+
+            <a asp-controller="Orders"
+               asp-action="Create"
+               class="success-btn-primary">
+                Create Another Order &rarr;
+            </a>
+
+            <a asp-controller="Catalog"
+               asp-action="Index"
+               class="success-btn-secondary">
+                Back to Catalog
+            </a>
+
+        </div>
+
     </div>
 
-    <a asp-controller="Orders"
-       asp-action="Create"
-       class="btn btn-primary">
-        Create Another Order
-    </a>
-
-    <a asp-controller="Catalog"
-       asp-action="Index"
-       class="btn btn-secondary">
-        Back to Catalog
-    </a>
 </div>
