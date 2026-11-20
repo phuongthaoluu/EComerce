@@ -6,41 +6,425 @@
     decimal total = Model.Sum(x => x.Price * x.Quantity);
 }
 
-<div class="container mt-4">
-    <h2>Order Preview</h2>
+<style>
+    .preview-page {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        padding: 20px 0 55px;
+    }
 
-    <div class="alert alert-info">
+    .preview-header {
+        background: linear-gradient(120deg, #fff0f6, #ffffff);
+        border: 1px solid #f1dce6;
+        border-radius: 22px;
+        padding: 35px;
+        margin-bottom: 28px;
+    }
+
+    .preview-label {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        color: #b97596;
+        margin-bottom: 12px;
+    }
+
+    .preview-title {
+        font-size: 35px;
+        font-weight: 800;
+        letter-spacing: -1px;
+        color: #63374d;
+        margin-bottom: 10px;
+    }
+
+    .preview-description {
+        font-size: 14px;
+        color: #a08a95;
+        margin-bottom: 0;
+    }
+
+    .preview-notice {
+        background: #fff4f8;
+        color: #96627e;
+        border: 1px solid #efd4e1;
+        border-radius: 12px;
+        padding: 16px 20px;
+        font-size: 14px;
+        margin-bottom: 25px;
+    }
+
+    .preview-container {
+        background: #ffffff;
+        border: 1px solid #f0dce6;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 8px 30px rgba(180, 110, 145, 0.07);
+    }
+
+    .preview-container-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 24px 28px;
+        border-bottom: 1px solid #f4e4eb;
+    }
+
+    .preview-container-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #63374d;
+        margin: 0;
+    }
+
+    .preview-count {
+        background: #fff0f6;
+        color: #b16b8d;
+        border-radius: 20px;
+        padding: 7px 13px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .preview-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 0;
+    }
+
+    .preview-table thead {
+        background: #fff4f8;
+    }
+
+    .preview-table th {
+        color: #8d5b74;
+        padding: 18px 20px;
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+        border-bottom: 1px solid #efdce5;
+    }
+
+    .preview-table td {
+        padding: 20px;
+        vertical-align: middle;
+        border-bottom: 1px solid #f4e8ee;
+        color: #73576a;
+        font-size: 14px;
+    }
+
+    .preview-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .preview-table tbody tr:hover {
+        background: #fffafd;
+    }
+
+    .preview-product {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        min-width: 230px;
+    }
+
+    .preview-product-image {
+        width: 80px;
+        height: 80px;
+        padding: 8px;
+        object-fit: contain;
+        background: #fff0f6;
+        border: 1px solid #f5e2eb;
+        border-radius: 13px;
+        flex-shrink: 0;
+    }
+
+    .preview-product-name {
+        color: #63374d;
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 6px;
+    }
+
+    .preview-product-id {
+        font-size: 12px;
+        color: #ad94a1;
+    }
+
+    .preview-quantity {
+        display: inline-block;
+        background: #f9edf3;
+        color: #98617d;
+        padding: 8px 14px;
+        border-radius: 9px;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .preview-price {
+        color: #73576a;
+        font-size: 14px;
+        white-space: nowrap;
+    }
+
+    .preview-subtotal {
+        color: #b45e87 !important;
+        font-size: 15px !important;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .preview-summary {
+        background: linear-gradient(120deg, #fff3f8, #ffffff);
+        border: 1px solid #f0dce6;
+        border-radius: 20px;
+        padding: 30px;
+        margin-top: 26px;
+    }
+
+    .preview-summary-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .preview-summary-label {
+        color: #987587;
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 9px;
+    }
+
+    .preview-total {
+        color: #a94f7d;
+        font-size: 32px;
+        font-weight: 800;
+        letter-spacing: -1px;
+        margin: 0;
+    }
+
+    .preview-actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 25px;
+    }
+
+    .preview-confirm-btn {
+        background: linear-gradient(110deg, #d88eaf, #c8799d);
+        color: #ffffff;
+        border: none;
+        border-radius: 12px;
+        padding: 15px 28px;
+        font-size: 14px;
+        font-weight: 700;
+        transition: 0.2s;
+    }
+
+    .preview-confirm-btn:hover {
+        background: linear-gradient(110deg, #ca7ba0, #b86991);
+        color: #ffffff;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(190, 110, 150, 0.18);
+    }
+
+    .preview-back-btn {
+        display: inline-block;
+        background: #ffffff;
+        color: #96627e;
+        border: 1px solid #e7c5d5;
+        border-radius: 12px;
+        padding: 15px 25px;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: 0.2s;
+    }
+
+    .preview-back-btn:hover {
+        background: #fff0f6;
+        color: #a94f7d;
+        border-color: #dca5bf;
+    }
+
+    @@media (max-width: 767px) {
+        .preview-header {
+            padding: 25px;
+        }
+
+        .preview-title {
+            font-size: 28px;
+        }
+
+        .preview-container-header {
+            padding: 20px;
+        }
+
+        .preview-table th,
+        .preview-table td {
+            padding: 14px;
+        }
+
+        .preview-product-image {
+            width: 60px;
+            height: 60px;
+        }
+
+        .preview-summary {
+            padding: 25px 20px;
+        }
+
+        .preview-summary-content {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .preview-total {
+            font-size: 27px;
+        }
+
+        .preview-actions {
+            flex-direction: column;
+        }
+
+        .preview-confirm-btn,
+        .preview-back-btn {
+            width: 100%;
+            text-align: center;
+        }
+    }
+</style>
+
+<div class="preview-page">
+
+    <div class="preview-header">
+
+        <div class="preview-label">
+            WHOLESALE ORDERING
+        </div>
+
+        <h1 class="preview-title">
+            Order Preview
+        </h1>
+
+        <p class="preview-description">
+            Review your selected products before placing the order.
+        </p>
+
+    </div>
+
+    <div class="preview-notice">
         Please review your order before confirming.
     </div>
 
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped">
-            <thead class="table-dark">
-                <tr>
-                    <th>Product</th>
-                    <th>Quantity</th>
-                    <th>Unit Price</th>
-                    <th>Subtotal</th>
-                </tr>
-            </thead>
+    <div class="preview-container">
 
-            <tbody>
-                @foreach (var item in Model)
-                {
+        <div class="preview-container-header">
+
+            <h2 class="preview-container-title">
+                Order Details
+            </h2>
+
+            <span class="preview-count">
+                @Model.Count Products
+            </span>
+
+        </div>
+
+        <div class="table-responsive">
+
+            <table class="preview-table">
+
+                <thead>
                     <tr>
-                        <td>@item.ItemName</td>
-                        <td>@item.Quantity</td>
-                        <td>@item.Price.ToString("N0") VND</td>
-                        <td>@((item.Price * item.Quantity).ToString("N0")) VND</td>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Subtotal</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td>
+
+                                <div class="preview-product">
+
+                                    <img src="@Url.Content($"~/images/items/{item.ItemID}.jpg")"
+                                         alt="@item.ItemName"
+                                         class="preview-product-image"
+                                         loading="lazy" />
+
+                                    <div>
+
+                                        <div class="preview-product-name">
+                                            @item.ItemName
+                                        </div>
+
+                                        <div class="preview-product-id">
+                                            Item #@item.ItemID
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+                            <td>
+                                <span class="preview-quantity">
+                                    @item.Quantity
+                                </span>
+                            </td>
+
+                            <td>
+                                <span class="preview-price">
+                                    @item.Price.ToString("N0") VND
+                                </span>
+                            </td>
+
+                            <td class="preview-subtotal">
+                                @((item.Price * item.Quantity).ToString("N0")) VND
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
     </div>
 
-    <h4 class="text-end">
-        Total: @total.ToString("N0") VND
-    </h4>
+    <div class="preview-summary">
+
+        <div class="preview-summary-content">
+
+            <div>
+
+                <div class="preview-summary-label">
+                    Total Order Amount
+                </div>
+
+                <h3 class="preview-total">
+                    @total.ToString("N0") VND
+                </h3>
+
+            </div>
+
+            <span class="preview-count">
+                Ready for confirmation
+            </span>
+
+        </div>
+
+    </div>
 
     <form asp-controller="Orders"
           asp-action="Confirm"
@@ -59,16 +443,21 @@
                    value="@Model[i].Quantity" />
         }
 
-        <div class="mt-4">
-            <button type="submit" class="btn btn-success">
-                Confirm Order (Test)
-            </button>
+        <div class="preview-actions">
 
             <a asp-controller="Orders"
                asp-action="Create"
-               class="btn btn-secondary">
+               class="preview-back-btn">
                 Back to Create Order
             </a>
+
+            <button type="submit"
+                    class="preview-confirm-btn">
+                Confirm Order  &rarr;
+            </button>
+
         </div>
+
     </form>
+
 </div>

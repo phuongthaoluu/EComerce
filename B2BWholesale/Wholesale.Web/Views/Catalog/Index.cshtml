@@ -1,47 +1,344 @@
-﻿@model IEnumerable<Wholesale.Web.ViewModels.ItemViewModel>
+﻿
+@model IEnumerable<Wholesale.Web.ViewModels.ItemViewModel>
 
 @{
     ViewData["Title"] = "Product Catalog";
 }
 
-<div class="container mt-4">
-    <h2>Product Catalog</h2>
+<style>
+    .catalog-page {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        padding: 20px 0 50px;
+    }
 
-    <p>Available wholesale products</p>
+    .catalog-header {
+        background: linear-gradient(120deg, #fff0f6, #ffffff);
+        border: 1px solid #f2dce7;
+        border-radius: 22px;
+        padding: 35px;
+        margin-bottom: 30px;
+    }
 
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped table-hover">
-            <thead class="table-dark">
-                <tr>
-                    <th>Item ID</th>
-                    <th>Item Name</th>
-                    <th>Size</th>
-                    <th>Price</th>
-                    <th>Stock Quantity</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
+    .catalog-label {
+        color: #bc7496;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        margin-bottom: 12px;
+    }
 
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>@item.ItemID</td>
-                        <td>@item.ItemName</td>
-                        <td>@item.Size</td>
-                        <td>@item.Price.ToString("N0") VND</td>
-                        <td>@item.StockQuantity</td>
-                        <td>
+    .catalog-title {
+        color: #63374d;
+        font-size: 35px;
+        font-weight: 800;
+        letter-spacing: -1px;
+        margin-bottom: 12px;
+    }
+
+    .catalog-description {
+        color: #9c8290;
+        font-size: 14px;
+        margin-bottom: 0;
+    }
+
+    .catalog-search-box {
+        position: relative;
+        margin-bottom: 30px;
+    }
+
+    .catalog-search {
+        width: 100%;
+        padding: 15px 20px;
+        border-radius: 13px;
+        background: #ffffff;
+        border: 1px solid #eed9e4;
+        color: #684357;
+        font-size: 14px;
+        outline: none;
+        transition: 0.2s;
+    }
+
+    .catalog-search:focus {
+        border-color: #d48bac;
+        box-shadow: 0 0 0 4px rgba(212, 139, 172, 0.12);
+    }
+
+    .catalog-search::placeholder {
+        color: #b6a0ac;
+    }
+
+    .catalog-card {
+        background: #ffffff;
+        border: 1px solid #f0dfe7;
+        border-radius: 18px;
+        overflow: hidden;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        transition: 0.25s;
+    }
+
+    .catalog-card:hover {
+        transform: translateY(-5px);
+        border-color: #e5b2c9;
+        box-shadow: 0 12px 30px rgba(180, 110, 145, 0.12);
+    }
+
+    .catalog-image-box {
+        background: #fff1f6;
+        height: 210px;
+        padding: 22px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    .catalog-image {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        transition: transform 0.3s ease;
+    }
+
+    .catalog-card:hover .catalog-image {
+        transform: scale(1.05);
+    }
+
+    .catalog-id {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        background: rgba(255, 255, 255, 0.9);
+        color: #a26784;
+        padding: 6px 10px;
+        border-radius: 8px;
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+    .catalog-card-body {
+        padding: 22px;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    .catalog-item-name {
+        color: #633b50;
+        font-size: 16px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        min-height: 42px;
+    }
+
+    .catalog-item-size {
+        color: #aa929f;
+        font-size: 13px;
+        margin-bottom: 18px;
+    }
+
+    .catalog-price {
+        color: #b45e87;
+        font-size: 21px;
+        font-weight: 800;
+        margin-bottom: 12px;
+    }
+
+    .catalog-stock {
+        display: inline-block;
+        background: #f9edf3;
+        color: #98617d;
+        padding: 7px 12px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .catalog-card-bottom {
+        margin-top: auto;
+        padding-top: 20px;
+    }
+
+    .catalog-btn {
+        display: block;
+        width: 100%;
+        background: linear-gradient(110deg, #da91b0, #c8799d);
+        color: white;
+        border: none;
+        border-radius: 11px;
+        padding: 12px;
+        font-size: 13px;
+        font-weight: 600;
+        text-align: center;
+        text-decoration: none;
+        transition: 0.2s;
+    }
+
+    .catalog-btn:hover {
+        background: linear-gradient(110deg, #cb7da1, #b86a91);
+        color: white;
+        box-shadow: 0 5px 15px rgba(190, 110, 150, 0.2);
+    }
+
+    .catalog-empty {
+        text-align: center;
+        background: #fff4f8;
+        color: #a4758c;
+        padding: 30px;
+        border-radius: 15px;
+        margin-top: 15px;
+    }
+
+    @@media (max-width: 767px) {
+        .catalog-header {
+            padding: 25px;
+        }
+
+        .catalog-title {
+            font-size: 28px;
+        }
+
+        .catalog-image-box {
+            height: 185px;
+        }
+
+        .catalog-card-body {
+            padding: 17px;
+        }
+
+        .catalog-price {
+            font-size: 18px;
+        }
+    }
+</style>
+
+<div class="catalog-page">
+
+    <div class="catalog-header">
+
+        <div class="catalog-label">
+            WHOLESALE COLLECTION
+        </div>
+
+        <h1 class="catalog-title">
+            Product Catalog
+        </h1>
+
+        <p class="catalog-description">
+            Explore our wholesale products.
+        </p>
+
+    </div>
+
+    <div class="catalog-search-box">
+
+        <input type="search"
+               id="catalogSearch"
+               class="catalog-search"
+               placeholder="Search products by name, size or ID..."
+               aria-label="Search products" />
+
+    </div>
+
+    <div class="row g-4" id="catalogGrid">
+
+        @foreach (var item in Model)
+        {
+            <div class="col-12 col-sm-6 col-lg-4 col-xl-3 catalog-item">
+
+                <div class="catalog-card">
+
+                    <div class="catalog-image-box">
+
+                        <span class="catalog-id">
+                            #@item.ItemID
+                        </span>
+
+                        <img src="@Url.Content($"~/images/items/{item.ItemID}.jpg")"
+                             alt="@item.ItemName"
+                             class="catalog-image"
+                             loading="lazy" />
+
+                    </div>
+
+                    <div class="catalog-card-body">
+
+                        <div class="catalog-item-name">
+                            @item.ItemName
+                        </div>
+
+                        <div class="catalog-item-size">
+                            @item.Size
+                        </div>
+
+                        <div class="catalog-price">
+                            @item.Price.ToString("N0") VND
+                        </div>
+
+                        <div>
+                            <span class="catalog-stock">
+                                Stock: @item.StockQuantity
+                            </span>
+                        </div>
+
+                        <div class="catalog-card-bottom">
+
                             <a asp-controller="Orders"
                                asp-action="Create"
                                asp-route-itemId="@item.ItemID"
-                               class="btn btn-primary btn-sm">
-                                Add to Order
+                               class="catalog-btn">
+                                Add to Order &rarr;
                             </a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
     </div>
+
+    <div id="catalogEmpty"
+         class="catalog-empty"
+         hidden>
+        No products found.
+    </div>
+
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const searchInput = document.getElementById("catalogSearch");
+        const products = document.querySelectorAll(".catalog-item");
+        const emptyMessage = document.getElementById("catalogEmpty");
+
+        searchInput.addEventListener("input", function () {
+
+            const keyword = searchInput.value.toLowerCase().trim();
+            let visibleCount = 0;
+
+            products.forEach(function (product) {
+
+                const text = product.textContent.toLowerCase();
+
+                if (text.includes(keyword)) {
+                    product.style.display = "";
+                    visibleCount++;
+                }
+                else {
+                    product.style.display = "none";
+                }
+
+            });
+
+            emptyMessage.hidden = visibleCount !== 0;
+
+        });
+
+    });
+</script>

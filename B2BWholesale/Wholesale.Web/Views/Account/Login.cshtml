@@ -1,49 +1,279 @@
-﻿@model Wholesale.Web.ViewModels.LoginViewModel
+﻿
+@model Wholesale.Web.ViewModels.LoginViewModel
 
 @{
     ViewData["Title"] = "Agent Login";
 }
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-5">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h3 class="text-center mb-4">Agent Login</h3>
+<style>
+    .login-page {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        padding: 35px 0 55px;
+    }
 
-                    @if (ViewBag.Message != null)
-                    {
-                        <div class="alert alert-info">
-                            @ViewBag.Message
-                        </div>
-                    }
+    .login-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        min-height: 560px;
+        background: #ffffff;
+        border: 1px solid #f1dce5;
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 20px 55px rgba(169, 99, 131, 0.12);
+    }
 
-                    <form asp-controller="Account" asp-action="Login" method="post">
-                        @Html.AntiForgeryToken()
+    .login-left {
+        background: linear-gradient(145deg, #e6a1bc, #f5ccdc);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 55px;
+        position: relative;
+        overflow: hidden;
+    }
 
-                        <div asp-validation-summary="ModelOnly"
-                             class="text-danger mb-3">
-                        </div>
+    .login-left::before {
+        content: "";
+        position: absolute;
+        width: 390px;
+        height: 390px;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        border-radius: 50%;
+        right: -180px;
+        bottom: -180px;
+        box-shadow:
+            0 0 0 45px rgba(255, 255, 255, 0.08),
+            0 0 0 90px rgba(255, 255, 255, 0.05);
+    }
 
+    .login-left-content {
+        position: relative;
+        z-index: 1;
+    }
 
-                        <div class="mb-3">
-                            <label asp-for="Username" class="form-label"></label>
-                            <input asp-for="Username" class="form-control" />
-                            <span asp-validation-for="Username" class="text-danger"></span>
-                        </div>
+    .login-label {
+        color: #894764;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        margin-bottom: 25px;
+    }
 
-                        <div class="mb-3">
-                            <label asp-for="Password" class="form-label"></label>
-                            <input asp-for="Password" class="form-control" />
-                            <span asp-validation-for="Password" class="text-danger"></span>
-                        </div>
+    .login-left h1 {
+        color: #713b55;
+        font-size: clamp(42px, 5vw, 62px);
+        font-weight: 800;
+        letter-spacing: -2px;
+        line-height: 1.12;
+        margin-bottom: 0;
+    }
 
-                        <button type="submit" class="btn btn-primary w-100">
-                            Login
-                        </button>
-                    </form>
+    .login-left h1 span {
+        color: #ffffff;
+    }
+
+    .login-right {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 60px 55px;
+        background: #ffffff;
+    }
+
+    .login-form {
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .login-form h2 {
+        color: #63374d;
+        font-size: 34px;
+        font-weight: 800;
+        letter-spacing: -1px;
+        margin-bottom: 10px;
+    }
+
+    .login-subtitle {
+        color: #a58b98;
+        font-size: 14px;
+        margin-bottom: 35px;
+    }
+
+    .login-form .form-label {
+        color: #754c60;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+
+    .login-form .form-control {
+        height: 52px;
+        background: #fffafd;
+        border: 1px solid #ecd5e0;
+        border-radius: 11px;
+        color: #63374d;
+        font-size: 15px;
+        padding: 12px 16px;
+        transition: 0.2s;
+    }
+
+    .login-form .form-control:focus {
+        background: #ffffff;
+        border-color: #cb85a5;
+        box-shadow: 0 0 0 4px rgba(203, 133, 165, 0.13);
+        outline: none;
+    }
+
+    .login-form .mb-3 {
+        margin-bottom: 24px !important;
+    }
+
+    .login-btn {
+        display: block;
+        width: 100%;
+        background: linear-gradient(110deg, #d88eaf, #c8799d);
+        color: #ffffff;
+        border: none;
+        border-radius: 11px;
+        padding: 15px;
+        font-size: 15px;
+        font-weight: 700;
+        margin-top: 10px;
+        transition: 0.2s;
+    }
+
+    .login-btn:hover {
+        background: linear-gradient(110deg, #cc7fa3, #b86a91);
+        color: #ffffff;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(190, 110, 150, 0.2);
+    }
+
+    .login-btn:active {
+        transform: translateY(0);
+    }
+
+    .login-form .alert-info {
+        background: #fff1f6;
+        border: 1px solid #e9bfd1;
+        border-radius: 10px;
+        color: #8b4b69;
+        font-size: 14px;
+    }
+
+    .login-form .text-danger {
+        color: #c74269 !important;
+        font-size: 13px;
+    }
+
+    @@media (max-width: 767px) {
+        .login-page {
+            padding: 15px 0 35px;
+        }
+
+        .login-container {
+            grid-template-columns: 1fr;
+        }
+
+        .login-left {
+            min-height: 220px;
+            padding: 35px;
+        }
+
+        .login-left h1 {
+            font-size: 42px;
+        }
+
+        .login-right {
+            padding: 40px 30px;
+        }
+
+        .login-form h2 {
+            font-size: 29px;
+        }
+    }
+</style>
+
+<div class="login-page">
+    <div class="login-container">
+
+        <div class="login-left">
+            <div class="login-left-content">
+
+                <div class="login-label">
+                    WHOLESALE PORTAL
                 </div>
+
+                <h1>
+                    Welcome
+                    <br />
+                    <span>back.</span>
+                </h1>
+
             </div>
         </div>
+
+        <div class="login-right">
+            <div class="login-form">
+
+                <h2>Agent Login</h2>
+
+                <p class="login-subtitle">
+                    Sign in to your account.
+                </p>
+
+                @if (ViewBag.Message != null)
+                {
+                    <div class="alert alert-info">
+                        @ViewBag.Message
+                    </div>
+                }
+
+                <form asp-controller="Account"
+                      asp-action="Login"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="text-danger mb-3">
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Username"
+                               class="form-label">
+                        </label>
+
+                        <input asp-for="Username"
+                               class="form-control" />
+
+                        <span asp-validation-for="Username"
+                              class="text-danger">
+                        </span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Password"
+                               class="form-label">
+                        </label>
+
+                        <input asp-for="Password"
+                               class="form-control" />
+
+                        <span asp-validation-for="Password"
+                              class="text-danger">
+                        </span>
+                    </div>
+
+                    <button type="submit"
+                            class="login-btn">
+                        Login
+                    </button>
+
+                </form>
+
+            </div>
+        </div>
+
     </div>
 </div>

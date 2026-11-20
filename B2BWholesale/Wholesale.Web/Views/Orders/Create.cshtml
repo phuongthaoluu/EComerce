@@ -1,75 +1,480 @@
-﻿@model Wholesale.Web.ViewModels.CreateOrderViewModel
+﻿
+@model Wholesale.Web.ViewModels.CreateOrderViewModel
 
 @{
     ViewData["Title"] = "Create Order";
 }
 
-<div class="container mt-4">
-    <h2>Create Order</h2>
+<style>
+    .order-page {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        padding: 20px 0 55px;
+    }
+
+    .order-header {
+        background: linear-gradient(120deg, #fff0f6, #ffffff);
+        border: 1px solid #f1dce6;
+        border-radius: 22px;
+        padding: 35px;
+        margin-bottom: 28px;
+    }
+
+    .order-label {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        color: #b97596;
+        margin-bottom: 12px;
+    }
+
+    .order-title {
+        font-size: 35px;
+        font-weight: 800;
+        letter-spacing: -1px;
+        color: #63374d;
+        margin-bottom: 10px;
+    }
+
+    .order-description {
+        color: #a08a95;
+        font-size: 14px;
+        margin-bottom: 0;
+    }
+
+    .order-container {
+        background: white;
+        border: 1px solid #f0dce6;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 8px 30px rgba(180, 110, 145, 0.07);
+    }
+
+    .order-container-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 24px 28px;
+        border-bottom: 1px solid #f4e4eb;
+    }
+
+    .order-container-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #63374d;
+        margin: 0;
+    }
+
+    .order-count {
+        background: #fff0f6;
+        color: #b16b8d;
+        border-radius: 20px;
+        padding: 7px 13px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .order-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 0;
+    }
+
+    .order-table thead {
+        background: #fff4f8;
+    }
+
+    .order-table th {
+        color: #8d5b74;
+        padding: 18px 20px;
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+        border-bottom: 1px solid #efdce5;
+    }
+
+    .order-table td {
+        padding: 20px;
+        vertical-align: middle;
+        border-bottom: 1px solid #f4e8ee;
+        color: #73576a;
+        font-size: 13px;
+    }
+
+    .order-table tbody tr {
+        transition: 0.2s;
+    }
+
+    .order-table tbody tr:hover {
+        background: #fffafd;
+    }
+
+    .order-product {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        min-width: 220px;
+    }
+
+    .order-product-image {
+        width: 76px;
+        height: 76px;
+        background: #fff0f6;
+        border: 1px solid #f5e2eb;
+        border-radius: 13px;
+        padding: 8px;
+        object-fit: contain;
+        flex-shrink: 0;
+    }
+
+    .order-product-info {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .order-product-name {
+        color: #63374d;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .order-product-id {
+        font-size: 11px;
+        color: #ad94a1;
+    }
+
+    .order-size {
+        color: #98818d;
+        font-size: 13px;
+    }
+
+    .order-price {
+        color: #b45e87;
+        font-size: 14px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .order-stock {
+        display: inline-block;
+        padding: 7px 12px;
+        border-radius: 9px;
+        background: #edf8f0;
+        color: #43865a;
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .order-stock-empty {
+        background: #fff0f1;
+        color: #c65b75;
+    }
+
+    .order-quantity {
+        width: 95px;
+        min-width: 80px;
+        height: 44px;
+        background: #fffafd;
+        border: 1px solid #e9d2de;
+        border-radius: 10px;
+        padding: 8px 12px;
+        color: #63374d;
+        text-align: center;
+        font-weight: 600;
+        box-shadow: none;
+    }
+
+    .order-quantity:focus {
+        border-color: #ce83a6;
+        box-shadow: 0 0 0 4px rgba(206, 131, 166, 0.12);
+        outline: none;
+    }
+
+    .line-total {
+        color: #a85780 !important;
+        font-weight: 700;
+        font-size: 14px !important;
+        white-space: nowrap;
+    }
+
+    .order-summary {
+        background: linear-gradient(120deg, #fff3f8, #ffffff);
+        border: 1px solid #f0dce6;
+        border-radius: 20px;
+        padding: 30px;
+        margin-top: 26px;
+    }
+
+    .order-summary-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .order-summary-label {
+        color: #987587;
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 9px;
+    }
+
+    .order-summary-total {
+        color: #a94f7d;
+        font-size: 32px;
+        font-weight: 800;
+        letter-spacing: -1px;
+        margin: 0;
+    }
+
+    .order-submit-btn {
+        background: linear-gradient(110deg, #d88eaf, #c8799d);
+        color: #ffffff;
+        border: none;
+        border-radius: 12px;
+        padding: 16px 30px;
+        font-size: 14px;
+        font-weight: 700;
+        transition: 0.2s;
+        white-space: nowrap;
+    }
+
+    .order-submit-btn:hover {
+        background: linear-gradient(110deg, #ca7ba0, #b86991);
+        color: #ffffff;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(190, 110, 150, 0.18);
+    }
+
+    .order-alert {
+        border-radius: 12px;
+        margin-bottom: 25px;
+    }
+
+    .order-validation {
+        padding: 0 5px;
+        margin-bottom: 20px;
+    }
+
+    @@media (max-width: 767px) {
+        .order-header {
+            padding: 25px;
+        }
+
+        .order-title {
+            font-size: 28px;
+        }
+
+        .order-container-header {
+            padding: 20px;
+        }
+
+        .order-table th,
+        .order-table td {
+            padding: 14px;
+        }
+
+        .order-product-image {
+            width: 60px;
+            height: 60px;
+        }
+
+        .order-summary {
+            padding: 25px 20px;
+        }
+
+        .order-summary-content {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .order-summary-total {
+            font-size: 27px;
+        }
+
+        .order-submit-btn {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="order-page">
+
+    <div class="order-header">
+
+        <div class="order-label">
+            WHOLESALE ORDERING
+        </div>
+
+        <h1 class="order-title">
+            Create Order
+        </h1>
+
+        <p class="order-description">
+            Select products and enter quantities.
+        </p>
+
+    </div>
+
     @if (TempData["OrderError"] != null)
     {
-        <div class="alert alert-danger">
+        <div class="alert alert-danger order-alert">
             @TempData["OrderError"]
         </div>
     }
-    <p>Select products and enter quantities.</p>
 
-    <form asp-controller="Orders" asp-action="Create" method="post">
+    <form asp-controller="Orders"
+          asp-action="Create"
+          method="post">
+
         @Html.AntiForgeryToken()
 
-        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+        <div asp-validation-summary="All"
+             class="text-danger order-validation">
+        </div>
 
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped">
-                <thead class="table-dark">
-                    <tr>
-                        <th>Product</th>
-                        <th>Size</th>
-                        <th>Price</th>
-                        <th>Stock</th>
-                        <th>Quantity</th>
-                        <th>Subtotal</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @for (int i = 0; i < Model.Lines.Count; i++)
-                    {
-                        <tr class="order-row">
-                            <td>
-                                <input type="hidden" asp-for="Lines[i].ItemID" />
-                                @Model.Lines[i].ItemName
-                            </td>
-                            <td>@Model.Lines[i].Size</td>
-                            <td>@Model.Lines[i].Price.ToString("N0") VND</td>
-                            <td>@Model.Lines[i].StockQuantity</td>
-                            <td>
-                                <input asp-for="Lines[i].Quantity"
-                                       type="number"
-                                       min="0"
-                                       max="@Model.Lines[i].StockQuantity"
-                                       data-price="@Model.Lines[i].Price.ToString(System.Globalization.CultureInfo.InvariantCulture)"
-                                       class="form-control order-quantity"
-                                       style="width: 100px;" />
-                                <span asp-validation-for="Lines[i].Quantity"
-                                      class="text-danger"></span>
-                            </td>
-                            <td class="line-total">0 VND</td>
+        <div class="order-container">
+
+            <div class="order-container-header">
+
+                <h2 class="order-container-title">
+                    Select Products
+                </h2>
+
+                <span class="order-count">
+                    @Model.Lines.Count Products
+                </span>
+
+            </div>
+
+            <div class="table-responsive">
+
+                <table class="order-table">
+
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Size</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Quantity</th>
+                            <th>Subtotal</th>
                         </tr>
-                    }
-                </tbody>
-            </table>
+                    </thead>
+
+                    <tbody>
+
+                        @for (int i = 0; i < Model.Lines.Count; i++)
+                        {
+                            <tr class="order-row">
+
+                                <td>
+
+                                    <input type="hidden"
+                                           asp-for="Lines[i].ItemID" />
+
+                                    <div class="order-product">
+
+                                        <img src="@Url.Content($"~/images/items/{Model.Lines[i].ItemID}.jpg")"
+                                             alt="@Model.Lines[i].ItemName"
+                                             class="order-product-image"
+                                             loading="lazy" />
+
+                                        <div class="order-product-info">
+
+                                            <span class="order-product-name">
+                                                @Model.Lines[i].ItemName
+                                            </span>
+
+                                            <span class="order-product-id">
+                                                Item #@Model.Lines[i].ItemID
+                                            </span>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+                                <td>
+                                    <span class="order-size">
+                                        @Model.Lines[i].Size
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="order-price">
+                                        @Model.Lines[i].Price.ToString("N0") VND
+                                    </span>
+                                </td>
+
+                                <td>
+
+                                    <span class="order-stock @(Model.Lines[i].StockQuantity == 0 ? "order-stock-empty" : "")">
+                                        @Model.Lines[i].StockQuantity
+                                    </span>
+
+                                </td>
+
+                                <td>
+
+                                    <input asp-for="Lines[i].Quantity"
+                                           type="number"
+                                           min="0"
+                                           max="@Model.Lines[i].StockQuantity"
+                                           data-price="@Model.Lines[i].Price.ToString(System.Globalization.CultureInfo.InvariantCulture)"
+                                           class="form-control order-quantity"
+                                           style="width: 100px;" />
+
+                                    <span asp-validation-for="Lines[i].Quantity"
+                                          class="text-danger">
+                                    </span>
+
+                                </td>
+
+                                <td class="line-total">
+                                    0 VND
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
         </div>
 
-        <h4 class="text-end mt-3">
-            Total: <span id="totalAmount">0 VND</span>
-        </h4>
+        <div class="order-summary">
 
-        <div class="text-end mt-3">
-            <button type="submit" class="btn btn-primary">
-                Review Order (Demo)
-            </button>
+            <div class="order-summary-content">
+
+                <div>
+
+                    <div class="order-summary-label">
+                        Total Order Amount
+                    </div>
+
+                    <h3 class="order-summary-total">
+                        <span id="totalAmount">0 VND</span>
+                    </h3>
+
+                </div>
+
+                <button type="submit"
+                        class="order-submit-btn">
+                    Review Order &rarr;
+                </button>
+
+            </div>
+
         </div>
+
     </form>
+
 </div>
 
 <script>

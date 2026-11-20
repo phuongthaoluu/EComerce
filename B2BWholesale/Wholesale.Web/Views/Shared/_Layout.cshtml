@@ -9,11 +9,65 @@
 
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    <style>
+            header nav.wh-navbar {
+                background: linear-gradient(90deg, #e7a2bd, #f0bfd2) !important;
+                border-bottom: 1px solid #d98eac !important;
+                box-shadow: 0 4px 15px rgba(160, 80, 115, 0.15);
+                padding-top: 14px;
+                padding-bottom: 14px;
+            }
+
+            header .wh-navbar .navbar-brand {
+                color: #69364d !important;
+                font-weight: 700;
+                font-size: 20px;
+            }
+
+            header .wh-navbar .nav-link {
+                color: #784159 !important;
+                font-weight: 500;
+                padding: 8px 14px !important;
+                border-radius: 10px;
+                transition: 0.2s;
+            }
+
+                header .wh-navbar .nav-link:hover {
+                    color: #853b5b !important;
+                    background: rgba(255, 255, 255, 0.35);
+                }
+
+            header .wh-navbar .wh-username {
+                color: #69364d !important;
+                font-weight: 600;
+            }
+
+            header .wh-navbar .wh-nav-btn {
+                background: #ffffff;
+                color: #a45179;
+                border: 1px solid #d98eac;
+                border-radius: 10px;
+                padding: 7px 20px;
+                font-weight: 600;
+                transition: 0.2s;
+            }
+
+                header .wh-navbar .wh-nav-btn:hover {
+                    background: #bc6f93;
+                    color: #ffffff;
+                    border-color: #bc6f93;
+                }
+
+            header .wh-navbar .navbar-toggler {
+                border-color: #c87b9b;
+            }
+    </style>
 </head>
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+        <nav class="navbar navbar-expand-lg navbar-light wh-navbar shadow-sm">
             <div class="container">
                 <a class="navbar-brand"
                    asp-controller="Home"
@@ -57,7 +111,6 @@
                             </a>
                         </li>
 
-                        
                         <li class="nav-item">
                             <a class="nav-link"
                                asp-controller="MyOrders"
@@ -65,32 +118,30 @@
                                 My Orders
                             </a>
                         </li>
-
                     </ul>
 
-                    
                     @if (User.Identity?.IsAuthenticated == true)
                     {
-                        <span class="navbar-text text-white me-3">
+                        <span class="navbar-text wh-username me-3">
                             @User.Identity.Name
                         </span>
 
                         <form asp-controller="Account"
-                                asp-action="Logout"
-                                method="post">
+                              asp-action="Logout"
+                              method="post">
                             @Html.AntiForgeryToken()
 
                             <button type="submit"
-                                    class="btn btn-outline-light">
+                                    class="btn wh-nav-btn">
                                 Logout
                             </button>
                         </form>
                     }
                     else
                     {
-                        <a class="btn btn-outline-light"
-                            asp-controller="Account"
-                            asp-action="Login">
+                        <a class="btn wh-nav-btn"
+                           asp-controller="Account"
+                           asp-action="Login">
                             Login
                         </a>
                     }

@@ -1,8 +1,261 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<style>
+    .wh-home {
+        font-family: 'Segoe UI', Arial, sans-serif;
+        padding: 35px 0 55px;
+    }
+
+    .wh-card {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        min-height: 580px;
+        border-radius: 26px;
+        overflow: hidden;
+        background: #ffffff;
+        box-shadow: 0 20px 60px rgba(169, 99, 131, 0.13);
+        border: 1px solid #f7e7ee;
+    }
+
+    .wh-left {
+        background: linear-gradient(145deg, #efb9cf, #f9dce8);
+        padding: 48px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .wh-left::before {
+            content: "";
+            position: absolute;
+            width: 380px;
+            height: 380px;
+            border: 1px solid rgba(255, 255, 255, 0.38);
+            border-radius: 50%;
+            right: -180px;
+            bottom: -175px;
+            box-shadow: 0 0 0 45px rgba(255, 255, 255, 0.07), 0 0 0 95px rgba(255, 255, 255, 0.05);
+        }
+
+    .wh-left-content {
+        position: relative;
+        z-index: 1;
+        margin: auto 0;
+    }
+
+    .wh-title {
+        font-size: clamp(42px, 5vw, 64px);
+        font-weight: 800;
+        line-height: 1.1;
+        letter-spacing: -2px;
+        color: #713b55;
+        margin-bottom: 24px;
+    }
+
+        .wh-title span {
+            color: #ffffff;
+        }
+
+    .wh-left-desc {
+        color: #88516a;
+        font-size: 15px;
+        line-height: 1.8;
+        max-width: 320px;
+    }
+
+    .wh-left-footer {
+        color: #a36a84;
+        font-size: 11px;
+        letter-spacing: 1.5px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .wh-right {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 65px 55px;
+    }
+
+    .wh-right-label {
+        font-size: 11px;
+        letter-spacing: 2px;
+        color: #b87896;
+        font-weight: 700;
+        margin-bottom: 14px;
+    }
+
+    .wh-right h2 {
+        color: #573448;
+        font-size: 36px;
+        font-weight: 800;
+        letter-spacing: -1px;
+        margin-bottom: 10px;
+    }
+
+    .wh-right-desc {
+        color: #9c8791;
+        font-size: 14px;
+        margin-bottom: 35px;
+    }
+
+    .wh-link {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: #ffffff;
+        border: 1px solid #f1dde6;
+        border-radius: 13px;
+        padding: 20px 22px;
+        margin-bottom: 14px;
+        text-decoration: none;
+        color: #71455a;
+        font-weight: 600;
+        transition: 0.2s;
+    }
+
+        .wh-link:hover {
+            color: #ab5c82;
+            background: #fff4f8;
+            border-color: #eab9d0;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(186, 112, 147, 0.10);
+        }
+
+    .wh-link-primary {
+        background: linear-gradient(110deg, #d88eaf, #c8799d);
+        color: #ffffff;
+        border: none;
+    }
+
+        .wh-link-primary:hover {
+            color: #ffffff;
+            background: linear-gradient(110deg, #ce82a5, #b96b91);
+        }
+
+    .wh-arrow {
+        font-size: 20px;
+        font-weight: 400;
+    }
+
+    .wh-right-footer {
+        margin-top: 30px;
+        text-align: center;
+        font-size: 12px;
+        color: #ae9aa4;
+    }
+
+    @@media (max-width: 767px) {
+        .wh-home {
+            padding: 15px 0 35px;
+        }
+
+        .wh-card {
+            grid-template-columns: 1fr;
+        }
+
+        .wh-left {
+            min-height: 320px;
+            padding: 30px;
+        }
+
+        .wh-title {
+            font-size: 42px;
+        }
+
+        .wh-right {
+            padding: 45px 30px;
+        }
+
+            .wh-right h2 {
+                font-size: 30px;
+            }
+    }
+</style>
+
+<div class="wh-home">
+    <div class="wh-card">
+
+        <div class="wh-left">
+
+            <div class="wh-left-content">
+
+                <h1 class="wh-title">
+                    Wholesale
+                    <br />
+                    made
+                    <br />
+                    <span>simple.</span>
+                </h1>
+
+                <p class="wh-left-desc">
+                    Everything you need to manage
+                    wholesale orders in one place.
+                </p>
+
+            </div>
+
+            <div class="wh-left-footer">
+                WHOLESALE BUSINESS SYSTEM
+            </div>
+
+        </div>
+
+        <div class="wh-right">
+
+            <div class="wh-right-label">
+                WHOLESALE PORTAL
+            </div>
+
+            <h2>
+                Welcome back.
+            </h2>
+
+            <p class="wh-right-desc">
+                What would you like to do today?
+            </p>
+
+            <a asp-controller="Catalog"
+               asp-action="Index"
+               class="wh-link wh-link-primary">
+
+                <span>
+                    Browse Products
+                </span>
+
+                <span class="wh-arrow">
+                    &rarr;
+                </span>
+
+            </a>
+
+            @if (User.Identity?.IsAuthenticated == true && User.IsInRole("Agent"))
+            {
+                <a asp-controller="MyOrders"
+                   asp-action="Index"
+                   class="wh-link">
+
+                    <span>
+                        My Orders
+                    </span>
+
+                    <span class="wh-arrow">
+                        &rarr;
+                    </span>
+
+                </a>
+            }
+
+            <div class="wh-right-footer">
+                Simple. Secure. Convenient.
+            </div>
+
+        </div>
+
+    </div>
 </div>
