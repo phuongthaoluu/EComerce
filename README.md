@@ -9,7 +9,7 @@ https://github.com/phuongthaoluu/ECommerce
 
 ### 2. Video Demo (Optional)
 
-Not included.
+
 
 ### 3. Database Connection Configuration
 
